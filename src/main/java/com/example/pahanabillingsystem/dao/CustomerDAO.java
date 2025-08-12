@@ -10,7 +10,7 @@ import java.util.List;
 public class CustomerDAO {
 
     public void addCustomer(Customer customer) {
-        String sql = "INSERT INTO customers (account_number, name, address, telephone) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO customer (account_number, name, address, telephone, unit_consumed) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -18,6 +18,7 @@ public class CustomerDAO {
             stmt.setString(2, customer.getName());
             stmt.setString(3, customer.getAddress());
             stmt.setString(4, customer.getTelephone());
+            stmt.setInt(5, customer.getUnitConsumed());
             stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -39,7 +40,8 @@ public class CustomerDAO {
                         rs.getString("account_number"),
                         rs.getString("name"),
                         rs.getString("address"),
-                        rs.getString("telephone")
+                        rs.getString("telephone"),
+                        rs.getInt("unit_consumed")
                 );
             }
         } catch (SQLException e) {
@@ -62,7 +64,8 @@ public class CustomerDAO {
                         rs.getString("account_number"),
                         rs.getString("name"),
                         rs.getString("address"),
-                        rs.getString("telephone")
+                        rs.getString("telephone"),
+                        rs.getInt("unit_consumed")
                 ));
             }
         } catch (SQLException e) {
@@ -72,7 +75,7 @@ public class CustomerDAO {
     }
 
     public void updateCustomer(Customer customer) {
-        String sql = "UPDATE customer SET account_number=?, name=?, address=?, telephone=? WHERE id=?";
+        String sql = "UPDATE customer SET account_number=?, name=?, address=?, telephone=?, unit_consumed=? WHERE id=?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -80,7 +83,8 @@ public class CustomerDAO {
             stmt.setString(2, customer.getName());
             stmt.setString(3, customer.getAddress());
             stmt.setString(4, customer.getTelephone());
-            stmt.setInt(5, customer.getId());
+            stmt.setInt(5, customer.getUnitConsumed());
+            stmt.setInt(6, customer.getId());
             stmt.executeUpdate();
 
         } catch (SQLException e) {

@@ -12,7 +12,7 @@ import org.mindrot.jbcrypt.BCrypt;
 public class UserDAO {
 
     public boolean save(User user) {
-        String sql = "INSERT INTO users (username, password, role, email) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO user (username, password, role, email) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -34,7 +34,7 @@ public class UserDAO {
     // Find user by username
     // Find user by email
     public User findByEmail(String email) {
-        String sql = "SELECT * FROM users WHERE email = ?";
+        String sql = "SELECT * FROM user WHERE email = ?";
         System.out.println("sql: "+sql);
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -65,7 +65,7 @@ public class UserDAO {
 
     // Add method to update the password in the database
     public boolean updatePassword(String email, String newPassword) {
-        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        String sql = "UPDATE user SET password = ? WHERE email = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -83,17 +83,8 @@ public class UserDAO {
     }
 
 
-
-
-
-
-
-
-
-
-
     public User getUserById(int id) throws SQLException {
-        String sql = "SELECT * FROM users WHERE id = ?";
+        String sql = "SELECT * FROM user WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);

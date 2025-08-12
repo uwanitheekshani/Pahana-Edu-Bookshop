@@ -12,6 +12,7 @@ public class Customer {
     public Customer() {
     }
 
+
     public Customer(int id, String accountNumber, String name, String address, String telephone, int unitConsumed) {
         this.id = id;
         this.accountNumber = accountNumber;
@@ -69,7 +70,3 @@ public class Customer {
         this.unitConsumed = unitConsumed;
     }
 }
-
-
-
-

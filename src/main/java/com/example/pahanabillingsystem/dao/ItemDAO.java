@@ -11,7 +11,7 @@ public class ItemDAO {
 
 
     public void addItem(Item item) {
-        String sql = "INSERT INTO items (item_name, description, unit_price, stock_quantity) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO item (item_name, description, unit_price, stock_quantity) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -27,7 +27,7 @@ public class ItemDAO {
     }
 
     public Item getItemById(int itemId) {
-        String sql = "SELECT * FROM items WHERE id = ?";
+        String sql = "SELECT * FROM item WHERE id = ?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -51,7 +51,7 @@ public class ItemDAO {
 
     public List<Item> getAllItems() {
         List<Item> items = new ArrayList<>();
-        String sql = "SELECT * FROM items";
+        String sql = "SELECT * FROM item";
 
         try (Connection conn = DBUtil.getConnection();
              Statement stmt = conn.createStatement();
@@ -73,7 +73,7 @@ public class ItemDAO {
     }
 
     public void updateItem(Item item) {
-        String sql = "UPDATE items SET item_name=?, description=?, unit_price=?, stock_quantity=? WHERE id=?";
+        String sql = "UPDATE item SET item_name=?, description=?, unit_price=?, stock_quantity=? WHERE id=?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -90,7 +90,7 @@ public class ItemDAO {
     }
 
     public void deleteItem(int itemId) {
-        String sql = "DELETE FROM items WHERE id=?";
+        String sql = "DELETE FROM item WHERE id=?";
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
