@@ -7,16 +7,18 @@ public class Customer {
     private String name;
     private String address;
     private String telephone;
+    private int unitConsumed;
 
     public Customer() {
     }
 
-    public Customer(int id, String accountNumber, String name, String address, String telephone) {
+    public Customer(int id, String accountNumber, String name, String address, String telephone, int unitConsumed) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.name = name;
         this.address = address;
         this.telephone = telephone;
+        this.unitConsumed = unitConsumed;
     }
 
     public int getId() {
@@ -58,4 +60,16 @@ public class Customer {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
+
+    public int getUnitConsumed() {
+        return unitConsumed;
+    }
+
+    public void setUnitConsumed(int unitConsumed) {
+        this.unitConsumed = unitConsumed;
+    }
 }
+
+
+
+
