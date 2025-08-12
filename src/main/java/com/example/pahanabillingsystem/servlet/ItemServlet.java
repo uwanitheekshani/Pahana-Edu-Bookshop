@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/item")
+@WebServlet("/item/*")
 public class ItemServlet extends HttpServlet {
 
     private final ItemService itemService = new ItemServiceImpl();

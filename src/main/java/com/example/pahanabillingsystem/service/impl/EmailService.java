@@ -9,9 +9,7 @@ import java.util.Properties;
 public class EmailService {
 
     private static final String SMTP_HOST = "smtp.gmail.com"; // Change for other providers
-    private static final String SMTP_PORT = "587"; // 465 for SSL, 587 for TLS
-    //    private static final String SMTP_USERNAME = "nimeshdenuwan2000@gmail.com";
-//    private static final String SMTP_PASSWORD = "sifc anwx xvae btat"; // Use App Passwords for security
+    private static final String SMTP_PORT = "587";
     private static final String SMTP_USERNAME = "uwanitheekshani@gmail.com";
     private static final String SMTP_PASSWORD = "krsr rjxv ljgz arah";
 

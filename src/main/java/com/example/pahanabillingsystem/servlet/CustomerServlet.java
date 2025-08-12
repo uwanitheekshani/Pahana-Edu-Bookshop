@@ -2,9 +2,7 @@ package com.example.pahanabillingsystem.servlet;
 
 import com.example.pahanabillingsystem.model.Customer;
 import com.example.pahanabillingsystem.service.CustomerService;
-import com.example.pahanabillingsystem.service.UserService;
 import com.example.pahanabillingsystem.service.impl.CustomerServiceImpl;
-import com.example.pahanabillingsystem.service.impl.UserServiceImpl;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/customer")
+@WebServlet("/customer/*")
 public class CustomerServlet extends HttpServlet {
 
     private final CustomerService customerService = new CustomerServiceImpl();
@@ -37,10 +35,10 @@ public class CustomerServlet extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            // Get all cars
+
             getAllCustomer(response);
         } else if (pathInfo.contains("byId")) {
-            // Get images for a specific car
+
             getCustomerById(request, response);
         } else {
             sendErrorResponse(response, "Invalid path for GET request.");
@@ -48,7 +46,7 @@ public class CustomerServlet extends HttpServlet {
     }
 
 
-         /*----------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------*/
     private void createCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String accountNumber = request.getParameter("accountNumber");
         String name = request.getParameter("name");
@@ -56,14 +54,14 @@ public class CustomerServlet extends HttpServlet {
         String telephone = request.getParameter("telephone");
 
 
-        Customer customer = new Customer(0, accountNumber, name, address, telephone);
+        Customer customer = new Customer(0, accountNumber, name, address, telephone,0);
 
         // Call service to add car and populate the carDTO with the ID
         customerService.addCustomer(customer);
         int customerId = customer.getId();  // Get the ID of the newly added car
 
 
-        sendSuccessResponse(response, "Car and Image added successfully.");
+        sendSuccessResponse(response, "Customer added successfully.");
     }
 
     private void updateCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -91,9 +89,9 @@ public class CustomerServlet extends HttpServlet {
             // Call service to update car
             customerService.updateCustomer(customer);
 
-            sendSuccessResponse(response, "Car updated successfully.");
+            sendSuccessResponse(response, "Customer  updated successfully.");
         } else {
-            sendErrorResponse(response, "Car not found.");
+            sendErrorResponse(response, "Customer not found.");
         }
     }
 

@@ -22,5 +22,4 @@ public interface UserService {
 
 
     User getUserById(int id ) throws SQLException;
-    }
-
+}
