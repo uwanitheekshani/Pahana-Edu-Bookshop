@@ -17,7 +17,7 @@ public class ItemDAO {
 
             stmt.setString(1, item.getItemName());
             stmt.setString(2, item.getDescription());
-            stmt.setString(3, item.getUnitPrice());
+            stmt.setDouble(3, item.getUnitPrice());
             stmt.setInt(4, item.getQuantity());
             stmt.executeUpdate();
 
@@ -39,7 +39,7 @@ public class ItemDAO {
                         rs.getInt("id"),
                         rs.getString("item_name"),
                         rs.getString("description"),
-                        rs.getString("unit_price"),
+                        rs.getDouble("unit_price"),
                         rs.getInt("stock_quantity")
                 );
             }
@@ -62,7 +62,7 @@ public class ItemDAO {
                         rs.getInt("id"),
                         rs.getString("item_name"),
                         rs.getString("description"),
-                        rs.getString("unit_price"),
+                        rs.getDouble("unit_price"),
                         rs.getInt("stock_quantity")
                 ));
             }
@@ -79,7 +79,7 @@ public class ItemDAO {
 
             stmt.setString(1, item.getItemName());
             stmt.setString(2, item.getDescription());
-            stmt.setString(3, item.getUnitPrice());
+            stmt.setDouble(3, item.getUnitPrice());
             stmt.setInt(4, item.getQuantity());
             stmt.setInt(5, item.getId());
             stmt.executeUpdate();

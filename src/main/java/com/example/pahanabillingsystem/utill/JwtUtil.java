@@ -16,11 +16,6 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 86400000;  // 1 day in milliseconds
     private static UserService userService = new UserServiceImpl();
 
-
-
-
-
-
     public static String generateToken(String useremail, String role) {
         User user =userService.getUserByEmail(useremail);
         int id= 0;

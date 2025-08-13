@@ -48,14 +48,49 @@ public class ItemServlet extends HttpServlet {
 
     /* --------------------------- CRUD Methods --------------------------- */
 
+//    private void createItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String itemName = request.getParameter("itemName");
+//        String description = request.getParameter("description");
+//        Double unitPrice = request.getParameter("unitPrice");
+//        String quantityParam = request.getParameter("quantity");
+//
+//        if (itemName == null || unitPrice == null || quantityParam == null) {
+//            sendErrorResponse(response, "Missing required fields.");
+//            return;
+//        }
+//
+//        int quantity;
+//        try {
+//            quantity = Integer.parseInt(quantityParam);
+//        } catch (NumberFormatException e) {
+//            sendErrorResponse(response, "Invalid quantity format.");
+//            return;
+//        }
+//
+//        Item item = new Item(0, itemName, description, unitPrice, quantity);
+//        itemService.addItem(item);
+//
+//        sendSuccessResponse(response, "Item added successfully.");
+//    }
+
     private void createItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String itemName = request.getParameter("itemName");
         String description = request.getParameter("description");
-        String unitPrice = request.getParameter("unitPrice");
+        String unitPriceParam = request.getParameter("unitPrice"); // keep as String
         String quantityParam = request.getParameter("quantity");
 
-        if (itemName == null || unitPrice == null || quantityParam == null) {
+        // Check for missing fields
+        if (itemName == null || unitPriceParam == null || quantityParam == null ||
+                itemName.trim().isEmpty() || unitPriceParam.trim().isEmpty() || quantityParam.trim().isEmpty()) {
             sendErrorResponse(response, "Missing required fields.");
+            return;
+        }
+
+        double unitPrice;
+        try {
+            unitPrice = Double.parseDouble(unitPriceParam);
+        } catch (NumberFormatException e) {
+            sendErrorResponse(response, "Invalid unit price format.");
             return;
         }
 
@@ -67,16 +102,57 @@ public class ItemServlet extends HttpServlet {
             return;
         }
 
+        // Create the Item object with parsed double
         Item item = new Item(0, itemName, description, unitPrice, quantity);
         itemService.addItem(item);
 
         sendSuccessResponse(response, "Item added successfully.");
     }
 
+
+//    private void updateItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        String itemIdParam = request.getParameter("itemId");
+//
+//        if (itemIdParam == null || itemIdParam.isEmpty()) {
+//            sendErrorResponse(response, "Item ID is missing.");
+//            return;
+//        }
+//
+//        int itemId;
+//        try {
+//            itemId = Integer.parseInt(itemIdParam);
+//        } catch (NumberFormatException e) {
+//            sendErrorResponse(response, "Invalid itemId format.");
+//            return;
+//        }
+//
+//        Item existingItem = itemService.getItemById(itemId);
+//        if (existingItem != null) {
+//            existingItem.setItemName(request.getParameter("itemName"));
+//            existingItem.setDescription(request.getParameter("description"));
+//            existingItem.setUnitPrice(request.getParameter("unitPrice"));
+//
+//            String quantityParam = request.getParameter("quantity");
+//            if (quantityParam != null) {
+//                try {
+//                    existingItem.setQuantity(Integer.parseInt(quantityParam));
+//                } catch (NumberFormatException e) {
+//                    sendErrorResponse(response, "Invalid quantity format.");
+//                    return;
+//                }
+//            }
+//
+//            itemService.updateItem(existingItem);
+//            sendSuccessResponse(response, "Item updated successfully.");
+//        } else {
+//            sendErrorResponse(response, "Item not found.");
+//        }
+//    }
+
     private void updateItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String itemIdParam = request.getParameter("itemId");
 
-        if (itemIdParam == null || itemIdParam.isEmpty()) {
+        if (itemIdParam == null || itemIdParam.trim().isEmpty()) {
             sendErrorResponse(response, "Item ID is missing.");
             return;
         }
@@ -91,12 +167,27 @@ public class ItemServlet extends HttpServlet {
 
         Item existingItem = itemService.getItemById(itemId);
         if (existingItem != null) {
+            // Set item name
             existingItem.setItemName(request.getParameter("itemName"));
-            existingItem.setDescription(request.getParameter("description"));
-            existingItem.setUnitPrice(request.getParameter("unitPrice"));
 
+            // Set description
+            existingItem.setDescription(request.getParameter("description"));
+
+            // Parse and set unit price
+            String unitPriceParam = request.getParameter("unitPrice");
+            if (unitPriceParam != null && !unitPriceParam.trim().isEmpty()) {
+                try {
+                    double unitPrice = Double.parseDouble(unitPriceParam);
+                    existingItem.setUnitPrice(unitPrice);
+                } catch (NumberFormatException e) {
+                    sendErrorResponse(response, "Invalid unit price format.");
+                    return;
+                }
+            }
+
+            // Parse and set quantity
             String quantityParam = request.getParameter("quantity");
-            if (quantityParam != null) {
+            if (quantityParam != null && !quantityParam.trim().isEmpty()) {
                 try {
                     existingItem.setQuantity(Integer.parseInt(quantityParam));
                 } catch (NumberFormatException e) {
@@ -105,12 +196,14 @@ public class ItemServlet extends HttpServlet {
                 }
             }
 
+            // Save changes
             itemService.updateItem(existingItem);
             sendSuccessResponse(response, "Item updated successfully.");
         } else {
             sendErrorResponse(response, "Item not found.");
         }
     }
+
 
     private void deleteItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String itemIdParam = request.getParameter("itemId");
