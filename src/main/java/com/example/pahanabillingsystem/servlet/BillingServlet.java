@@ -5,8 +5,7 @@ import com.example.pahanabillingsystem.model.Bill;
 import com.example.pahanabillingsystem.model.Item;
 import com.example.pahanabillingsystem.service.BillService;
 import com.example.pahanabillingsystem.service.impl.BillServiceImpl;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -94,6 +93,46 @@ public class BillingServlet extends HttpServlet {
 
         public String getMessage() {
             return message;
+        }
+    }
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String billIdParam = request.getParameter("id");
+
+        // Gson with LocalDateTime adapter
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class,
+                        (JsonSerializer<LocalDateTime>) (src, typeOfSrc, context) ->
+                                new JsonPrimitive(src.toString()))
+                .registerTypeAdapter(LocalDateTime.class,
+                        (JsonDeserializer<LocalDateTime>) (json, type, context) ->
+                                LocalDateTime.parse(json.getAsString()))
+                .create();
+
+        response.setContentType("application/json");
+
+        if (billIdParam != null) {
+            try {
+                int billId = Integer.parseInt(billIdParam);
+                Bill bill = billService.getBillById(billId);
+
+                if (bill != null) {
+                    response.getWriter().write(gson.toJson(bill));
+                } else {
+                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                    response.getWriter().write(gson.toJson(new ResponseMessage("Bill not found.")));
+                }
+            } catch (NumberFormatException e) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.getWriter().write(gson.toJson(new ResponseMessage("Invalid bill ID.")));
+            }
+        } else {
+            List<Bill> bills = billService.getAllBills();
+            response.getWriter().write(gson.toJson(bills));
         }
     }
 }

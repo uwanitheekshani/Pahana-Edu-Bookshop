@@ -14,10 +14,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
+
 @WebServlet("/login")
 public class LoginServlet  extends HttpServlet {
 
     private final UserService userService = new UserServiceImpl();
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException {
@@ -34,21 +38,48 @@ public class LoginServlet  extends HttpServlet {
             PrintWriter out = response.getWriter();
             Gson gson = new Gson();
 
+//            if (user != null) {
+//                // Generate JWT token if authentication is successful
+//                String token = JwtUtil.generateToken(user.getEmail(), user.getRole());
+//                System.out.println("authenticateUser BCrypt "+token);
+//                // Send the token as a response in a TokenResponse object
+//                response.setStatus(HttpServletResponse.SC_OK);  // 200 OK
+//                System.out.println("HttpServletResponse.SC_OK"+HttpServletResponse.SC_OK);
+//                out.print(gson.toJson(new TokenResponse(token)));  // Send token in response
+//
+//            } else {
+//                // Invalid credentials
+//                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // 401 Unauthorized
+//                System.out.println("HttpServletResponse.SC_OK"+HttpServletResponse.SC_UNAUTHORIZED);
+//                out.print(gson.toJson(new ErrorResponse("Invalid login credentials")));  // Error response
+//            }
+
             if (user != null) {
-                // Generate JWT token if authentication is successful
+                // Generate JWT token
                 String token = JwtUtil.generateToken(user.getEmail(), user.getRole());
-                System.out.println("authenticateUser BCrypt "+token);
-                // Send the token as a response in a TokenResponse object
-                response.setStatus(HttpServletResponse.SC_OK);  // 200 OK
-                System.out.println("HttpServletResponse.SC_OK"+HttpServletResponse.SC_OK);
-                out.print(gson.toJson(new TokenResponse(token)));  // Send token in response
+                System.out.println("authenticateUser BCrypt " + token);
+
+                // Set 200 OK
+                response.setStatus(HttpServletResponse.SC_OK);
+
+                // ✅ Create success response with both message and token
+                Map<String, Object> successResponse = new HashMap<>();
+                successResponse.put("message", "Login successful");
+                successResponse.put("token", token);
+                successResponse.put("email", user.getEmail());
+                successResponse.put("role", user.getRole());
+
+                out.print(gson.toJson(successResponse));
 
             } else {
                 // Invalid credentials
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);  // 401 Unauthorized
-                System.out.println("HttpServletResponse.SC_OK"+HttpServletResponse.SC_UNAUTHORIZED);
-                out.print(gson.toJson(new ErrorResponse("Invalid login credentials")));  // Error response
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("error", "Invalid login credentials");
+                out.print(gson.toJson(errorResponse));
             }
+
 
             out.flush();
 
